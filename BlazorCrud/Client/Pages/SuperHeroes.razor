@@ -1,0 +1,60 @@
+﻿@page "/SuperHeroes"
+@inject ISuperHeroService SuperHeorService
+@inject NavigationManager NavigationManager
+ 
+
+<h3>SuperHero</h3>
+
+
+<table class="table">
+    <thead >
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Hero Name</th>
+            <th>Comic</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ( var hero in SuperHeorService.Heroes)
+        {
+            <tr>
+                <td>@hero.FirstName</td>
+                <td>@hero.LastName</td>
+                <td>@hero.HeroName</td>
+                <td>@hero.Comic.Name </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>ShowHero(hero.Id))"><i class="oi oi-pencil"></i></button>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(()=>DeleteHero(hero.Id))"><i class="oi oi-delete"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+<button type="button" class="btn btn-primary" @onclick="CreateNewHero"> Create New Hero</button>
+
+
+@code {
+
+
+
+    protected override  Task OnInitializedAsync()
+    {
+        return  SuperHeorService.GetSuperHeroes();
+    }
+
+    void  ShowHero(int id)
+    {
+        NavigationManager.NavigateTo($"hero/{id}", false, false);
+    }
+    void CreateNewHero()
+    {
+        NavigationManager.NavigateTo("/hero");
+    }
+    void DeleteHero(int id) => SuperHeorService.DeleteHero(id);
+
+}
